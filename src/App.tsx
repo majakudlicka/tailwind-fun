@@ -1,19 +1,28 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    const root = document.documentElement
+    const current = root.getAttribute('data-theme')
+    return current === 'light' ? 'light' : 'dark'
+  })
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100">
-      <div className="mx-auto w-full max-w-6xl px-6 py-12">
+    <div className="min-h-screen">
+      <div className="tw-container">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
               Sample Tailwind Grid
             </h1>
-            <p className="mt-2 max-w-2xl text-sm text-zinc-200">
-              Responsive cards using <code className="text-zinc-200">grid</code>,
-              <code className="text-zinc-200">gap</code>, and breakpoint-based
+            <p className="mt-2 max-w-2xl text-sm" style={{ color: 'rgb(var(--muted))' }}>
+              Responsive cards using <code className="font-medium">grid</code>,
+              <code className="font-medium">gap</code>, and breakpoint-based
               column utilities.
             </p>
           </div>
@@ -21,12 +30,18 @@ function App() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-900 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+              className="tw-btn"
               onClick={() => setCount((c) => c + 1)}
             >
               Clicks: {count}
             </button>
-            <span className="text-xs text-zinc-300">State example</span>
+            <button
+              type="button"
+              className="tw-btn tw-btn-sm"
+              onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+            >
+              Theme: {theme}
+            </button>
           </div>
         </div>
 
@@ -65,32 +80,40 @@ function App() {
           ].map((item) => (
             <div
               key={item.title}
-              className="group rounded-2xl border border-white/10 bg-white/5 p-6 shadow-sm backdrop-blur transition hover:border-white/20 hover:bg-white/10"
+              className="tw-card group"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="text-base font-semibold text-zinc-100">
+                  <h2 className="text-base font-semibold">
                     {item.title}
                   </h2>
-                  <p className="mt-1 text-xs text-zinc-400">{item.tag}</p>
+                  <p className="mt-1 text-xs" style={{ color: 'rgb(var(--muted))' }}>
+                    {item.tag}
+                  </p>
                 </div>
-                <div className="rounded-full bg-white/10 px-2 py-1 text-[10px] font-medium text-zinc-200">
+                <div
+                  className="rounded-full px-2 py-1 text-[10px] font-medium"
+                  style={{
+                    backgroundColor: 'rgb(var(--fg) / 0.08)',
+                    color: 'rgb(var(--fg))',
+                  }}
+                >
                   New
                 </div>
               </div>
 
-              <p className="mt-4 text-sm leading-6 text-zinc-300">
+              <p className="mt-4 text-sm leading-6" style={{ color: 'rgb(var(--fg) / 0.9)' }}>
                 {item.desc}
               </p>
 
               <div className="mt-6 flex items-center justify-between">
                 <button
                   type="button"
-                  className="inline-flex items-center justify-center rounded-md bg-zinc-100 px-3 py-1.5 text-sm font-medium text-zinc-900 hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white/80"
+                  className="tw-btn tw-btn-sm"
                 >
                   View details
                 </button>
-                <span className="text-xs text-zinc-400 group-hover:text-zinc-300">
+                <span className="text-xs" style={{ color: 'rgb(var(--muted))' }}>
                   Updated just now
                 </span>
               </div>
